@@ -1,9 +1,5 @@
 # EarlyDay Simple Rails + React Exam
 
-> Please complete this as a private repo, and send an email to james@earlyday.com with your submission. Other candidates are completing the same test and if you make a PR it ruins their experience :D
-
-Uses sqlite and a combined repo, so setup is as easy as
-
 Clone the repo
 
 API:
