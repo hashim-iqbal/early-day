@@ -1,8 +1,22 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :job do
-    title { Faker.name }
+    title { Faker::Job.title }
     description { Faker::Lorem.paragraph }
-    status { 1 }
-    slug { Faker::Lorem.characters }
+    status { Job.statuses.keys.sample.to_sym }
+    slug { title }
+
+    trait :open do
+      status { :open }
+    end
+
+    trait :closed do
+      status { :closed }
+    end
+
+    trait :draft do
+      status { :draft }
+    end
   end
 end

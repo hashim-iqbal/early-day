@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :job_application do
-    job
+    job { association :job, :open }
     user
-    status { 1 }
+    status { :applied }
   end
 end

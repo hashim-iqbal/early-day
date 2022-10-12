@@ -7,10 +7,6 @@ const RequireAuth = () => {
   const [checkingAuthStatus, setCheckingAuthStatus] = useState(true)
   const auth = useContext(AuthContext);
 
-  useEffect(()=>{
-    checkAuthStatus();
-  },[]);
-
   const checkAuthStatus = async () => {
     if(auth.authenticated || !localStorage.getItem('access-token')){
       setCheckingAuthStatus(false);
@@ -25,6 +21,11 @@ const RequireAuth = () => {
       setCheckingAuthStatus(false);
     };
   };
+
+  useEffect(()=>{
+    checkAuthStatus();
+  },[]);
+
   if(checkingAuthStatus){
     return(<p>Checking if logged in or not</p>);
   }

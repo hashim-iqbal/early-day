@@ -1,25 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
-  # maybe not all of these are currently validated
-  it 'is not valid without a title, description, status or slug' do
-    %i[title description status slug].each do |attr|
-      user = Job.new(attr => nil)
-      puts attr
-      expect(user).to_not be_valid
-    end
+  describe 'Associations' do
+    it { should have_many(:job_applications).dependent(:destroy) }
   end
 
-  describe '#slug' do
-    it 'should be automatically generated' do
-      job = FactoryBot.create(:job)
-      expect(job.slug).to_not be_nil
-    end
+  describe 'Validations' do
+    subject { build(:job) }
 
-    it 'should be unique' do
-      job = FactoryBot.create(:job, title: 'foo')
-      job2 = FactoryBot.create(:job, title: 'foo')
-      expect(job.slug).to_not eq(job2.slug)
+    it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:status) }
+    it { should validate_presence_of(:description) }
+
+    it { should validate_uniqueness_of(:title) }
+  end
+
+  describe 'Enum' do
+    it { should define_enum_for(:status).with_values(%i[open closed draft]) }
+  end
+
+  describe 'callbacks' do
+    describe '#slug' do
+      let(:job) { create(:job) }
+
+      it 'should be automatically generated' do
+        expect(job.slug).to_not be_nil
+      end
+
+      it 'should be unique' do
+        job2 = build(:job, title: job.title)
+
+        expect(job2.valid?).to be_falsey
+        expect(job2.errors.full_messages).to include('Title has already been taken')
+      end
     end
   end
 end
